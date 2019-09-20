@@ -1,0 +1,53 @@
+#!/bin/sh
+
+set -e
+
+commands='help build run run_valgrind'
+
+help() {
+	echo >&2 'usage: ./dev COMMAND [OPTIONS...]'
+	echo >&2 "  available commands: $commands"
+}
+
+build() {
+	compile_flags='-std=c++11 -pedantic -Wall'
+	ignore_warnings='-Wno-unused-function'
+	g++ $compile_flags $ignore_warnings -o raytracer src/main.c $link_flags
+}
+
+run() {
+	build || exit 1
+	latest="img/latest.png"
+	save_previous="img/$(date +%s).png"
+	test -e "$latest" && cp "$latest" "$save_previous"
+	./raytracer "$latest"
+	test -e "$latest" -a -e "$save_previous" && {
+		diff -q "$latest" "$save_previous" 2>/dev/null && {
+			rm "$save_previous"
+		}
+	}
+	xdg-open img/latest.png
+}
+
+run_valgrind() {
+	build &&
+	valgrind ./raytracer output.png	
+}
+
+die() {
+	help
+	exit 1
+}
+
+[ "$#" -ge 1 ] || die
+
+command="$1"
+found_command=false
+for c in $commands; do
+	[ "$c" = "$command" ] && {
+		found_command=true
+		"$c" "$@"
+	}
+done
+
+[ "$found_command" = true ] || die
