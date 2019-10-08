@@ -47,6 +47,10 @@ struct World {
 	Color3f sky_color;
 };
 
+internal Color3f shade(Sphere *sphere, Ray hit, Material mat) {
+	Vector3f n = normalize(sub(hit.p, sphere->p));
+	return Color3f{0.5f*n.x + 0.5f, 0.5f*n.y + 0.5f, 0.5f*n.z + 0.5f};
+}
 
 void render(World *world, Frame *eye_frame, Color4b *img_data, f32 width, f32 height, f32 resolution, Color3f fully_saturated_color) {
 	int img_width = width * resolution;
@@ -74,7 +78,8 @@ void render(World *world, Frame *eye_frame, Color4b *img_data, f32 width, f32 he
 
 			Color3f c = world->sky_color;
 			if (sphere_nearest) {
-				c = world->materials[sphere_nearest->material_id].color;
+				Ray hit = ray_to_from(pix_ray.p, add(pix_ray.p, mul(sphere_nearest_dist, pix_ray.n)));
+				c = shade(sphere_nearest, hit, world->materials[sphere_nearest->material_id]);
 			}
 
 			img_data[(img_height - 1 - y)*img_width + x] = color_3f_to_4b(c, fully_saturated_color);
