@@ -2,7 +2,7 @@
 
 set -e
 
-commands='help build run run_valgrind'
+commands='help build run run_valgrind debug'
 
 help() {
 	echo >&2 'usage: ./dev COMMAND [OPTIONS...]'
@@ -10,9 +10,10 @@ help() {
 }
 
 build() {
+	more_flags="$@"
 	compile_flags='-std=c++11 -pedantic -Wall'
-	ignore_warnings='-Wno-unused-function'
-	g++ $compile_flags $ignore_warnings -o raytracer src/main.c $link_flags
+	ignore_warnings='-Wno-unused'
+	g++ $compile_flags $more_flags $ignore_warnings -o raytracer src/main.cpp $link_flags
 }
 
 run() {
@@ -22,11 +23,15 @@ run() {
 	test -e "$latest" && cp "$latest" "$save_previous"
 	./raytracer "$latest"
 	test -e "$latest" -a -e "$save_previous" && {
-		diff -q "$latest" "$save_previous" 2>/dev/null && {
+		diff -q "$latest" "$save_previous" &>/dev/null && {
 			rm "$save_previous"
 		}
 	}
-	xdg-open img/latest.png
+}
+
+debug() {
+	build -g || exit 1
+	gdb ./raytracer /tmp/debug.png
 }
 
 run_valgrind() {
@@ -46,6 +51,7 @@ found_command=false
 for c in $commands; do
 	[ "$c" = "$command" ] && {
 		found_command=true
+		shift
 		"$c" "$@"
 	}
 done

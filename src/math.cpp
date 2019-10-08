@@ -4,20 +4,25 @@
 #define INCLUDED_MATH
 
 
+#include <math.h>
+#include <float.h>
+
+
 // Trigonometry
 
 namespace {
-	const float pi = M_PI;
-	const float tau = 2.0f * M_PI;
+	const f32 pi = M_PI;
+	const f32 tau = 2.0f * M_PI;
+	const f32 max_f32 = FLT_MAX;
 }
 
-// Float
+// f32
 
-internal float clamp(float x, float min, float max) {
+internal f32 clamp(f32 x, f32 min, f32 max) {
 	return x < min ? min : (x > max ? max : x);
 }
 
-internal float square(float x) {
+internal f32 square(f32 x) {
 	return x * x;
 }
 
@@ -25,7 +30,7 @@ internal float square(float x) {
 // Vector3f
 
 struct Vector3f {
-	float x, y, z;
+	f32 x, y, z;
 };
 
 internal Vector3f add(Vector3f v, Vector3f w) {
@@ -40,19 +45,19 @@ internal Vector3f neg(Vector3f v) {
 	return Vector3f{ -v.x, -v.y, -v.z };
 }
 
-internal Vector3f mul(float l, Vector3f v) {
+internal Vector3f mul(f32 l, Vector3f v) {
 	return Vector3f{ l * v.x, l * v.y, l * v.z };
 }
 
-internal Vector3f div(Vector3f v, float l) {
+internal Vector3f div(Vector3f v, f32 l) {
 	return Vector3f{ v.x / l, v.y / l, v.z / l };
 }
 
-internal float dot(Vector3f v, Vector3f w) {
+internal f32 dot(Vector3f v, Vector3f w) {
 	return v.x*w.x + v.y*w.y + v.z*w.z;
 }
 
-internal float square(Vector3f v) {
+internal f32 square(Vector3f v) {
 	return dot(v, v);
 }
 
@@ -64,11 +69,15 @@ internal Vector3f normalize(Vector3f v) {
 // Point
 
 struct Point {
-	float x, y, z;
+	f32 x, y, z;
 };
 
 internal Point add(Point p, Vector3f v) {
 	return Point{ p.x + v.x, p.y + v.y, p.z + v.z };
+}
+
+internal Point sub(Point p, Vector3f v) {
+	return Point{ p.x - v.x, p.y - v.y, p.z - v.z };
 }
 
 internal Vector3f sub(Point p1, Point p0) {
