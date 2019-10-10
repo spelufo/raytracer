@@ -9,7 +9,7 @@
 #include "raytrace.cpp"
 
 namespace {
-	Color3f sky_color = {0.0f, 0.1f, 0.35f};
+	Color3f sky_color = {0.3f, 0.4f, 0.75f};
 	Color3f fully_saturated_color = {1.0f, 1.0f, 1.0f};
 
 	Material materials[] = {

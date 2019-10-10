@@ -10,6 +10,10 @@
 
 // Trigonometry
 
+#ifndef M_PI
+#  define M_PI 3.14159265358979323846264338327950288
+#endif
+
 namespace {
 	const f32 pi = M_PI;
 	const f32 tau = 2.0f * M_PI;
@@ -61,8 +65,12 @@ internal f32 square(Vector3f v) {
 	return dot(v, v);
 }
 
+internal f32 norm(Vector3f v) {
+	return sqrt(square(v));
+}
+
 internal Vector3f normalize(Vector3f v) {
-	return div(v, sqrt(square(v)));
+	return div(v, norm(v));
 }
 
 
@@ -85,11 +93,29 @@ internal Vector3f sub(Point p1, Point p0) {
 }
 
 
+// Random
+
+internal f32 random_f32() {
+	return (f32)rand() / RAND_MAX;
+}
+
+internal Vector3f random_in_unit_cube() {
+	return sub(mul(2.0f, Vector3f{random_f32(), random_f32(), random_f32()}), Vector3f{1.0f, 1.0f, 1.0f});
+}
+
+internal Vector3f random_in_unit_sphere() {
+	while (1) {
+		Vector3f v = random_in_unit_cube();
+		if (norm(v) < 1.0f) return v; 
+	}
+}
+
+
 // Ray
 
 struct Ray {
 	Point p;
-	Vector3f n;
+	Vector3f d;
 };
 
 internal Ray ray_to_from(Point b, Point a) {

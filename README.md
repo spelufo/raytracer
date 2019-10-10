@@ -1,23 +1,23 @@
 # A raytracer
 
-This is practice for learning some graphics programming and arriving at a sane C++ subset.
+This is practice for learning some graphics programming and finding a C++ subset I'm comfortable with.
 
-Very WIP for now, only got to output some colored circles by raycasting at spheres.
+![latest output image](https://raw.githubusercontent.com/spelufo/raytracer/master/img/latest.png)
 
 
-### Resources
+### Resources / References
+
+#### Ray tracing
+
+* [Raytracing in One Weekend][weekend]
+* [Handmade Ray #0][handmade]: Not physically based. The other episodes focus on making it faster.
+* [UC Davis course][ucdavis]
+* [Physically Based Rendering][pbr]
 
 #### Graphics
 
 * [Principles of Lighting and Rendering with John Carmack][carmack].
 * Foundations of 3D computer graphics - Gortler. Great book.
-
-#### Ray tracing
-
-* [Handmade Ray #0][handmade]: Not physically based. The other episodes focus on making it faster.
-* [Raytracing in One Weekend][weekend]
-* [UC Davis course][ucdavis]
-* [Physically Based Rendering][pbr]
 
 
 [carmack]: https://www.youtube.com/watch?v=IyUgHPs86XM

@@ -11,7 +11,7 @@ help() {
 
 build() {
 	more_flags="$@"
-	compile_flags='-std=c++11 -pedantic -Wall'
+	compile_flags='-std=c++11 -pedantic -Wall -O2'
 	ignore_warnings='-Wno-unused'
 	g++ $compile_flags $more_flags $ignore_warnings -o raytracer src/main.cpp $link_flags
 }
