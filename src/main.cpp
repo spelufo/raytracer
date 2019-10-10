@@ -9,14 +9,14 @@
 #include "raytrace.cpp"
 
 namespace {
-	Color3f sky_color = {0.3f, 0.4f, 0.75f};
-	Color3f fully_saturated_color = {1.0f, 1.0f, 1.0f};
+	Color3f sky_color = {0.5f, 0.7f, 1.0f};
+	Color3f fully_saturated_color = Color3fs::white;
 
 	Material materials[] = {
-		{Color3f{1.0f, 0.5f, 0.0f}},
-		{Color3f{0.5f, 0.2f, 0.1f}},
-		{Color3f{0.4f, 0.5f, 1.0f}},
-		{Color3f{0.4f, 0.5f, 0.0f}},
+		{0.0f, Color3f{0.8f, 0.8f, 0.8f}},
+		{1.0f, Color3f{0.4f, 0.3f, 0.3f}}, // ground material
+		{1.0f, Color3f{0.9f, 0.5f, 0.5f}},
+		{0.7f, Color3f{0.7f, 0.8f, 0.2f}},
 	};
 
 	Sphere spheres[] = {

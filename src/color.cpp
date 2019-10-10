@@ -53,6 +53,10 @@ internal Color3f normalize(Color3f v) {
     return div(v, sqrt(square(v)));
 }
 
+internal Color3f lerp(f32 l, Color3f v, Color3f w) {
+    return add(mul(l, v), mul(1.0f - l, w));
+}
+
 // Convert a Color3f to an aprox. sRGB Color4b.
 internal Color4b color_3f_to_4b(Color3f c, Color3f max) {
 	return Color4b{

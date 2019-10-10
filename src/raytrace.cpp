@@ -15,7 +15,8 @@ struct Frame {
 
 
 struct Material {
-	Color3f color;
+	f32 diffuse;
+	Color3f albedo;
 };
 
 
@@ -51,9 +52,8 @@ struct World {
 	Color3f sky_color;
 };
 
-internal Color3f bounce_attenuation(Material mat, f32 iangle, f32 oangle) {
-	// TO DO: Improve material model.
-	return Color3f{0.5f, 0.5f, 0.5f};
+internal Color3f bounce_attenuation(Material *mat, f32 iangle, f32 oangle) {
+	return mat->albedo;
 }
 
 internal Color3f trace_ray(World *world, Ray ray) {
@@ -71,16 +71,20 @@ internal Color3f trace_ray(World *world, Ray ray) {
 		}
 
 		if (sphere_nearest == NULL) {
-			// TO DO: Better sky model. Take ray direction into account.
-			return mul(attenuation, world->sky_color);
+			Color3f sky_color = lerp(0.5f*(normalize(ray.d).y + 1.0f), Color3fs::white, world->sky_color);
+			return mul(attenuation, sky_color);
 		}
 
 		Ray hit = ray_to_from(ray.p, add(ray.p, mul(sphere_nearest_dist, ray.d)));
 		Vector3f normal = surface_normal(sphere_nearest, hit.p);
-		ray = Ray{hit.p, add(normal, random_in_unit_sphere())}; // TO DO: Reflections, materials other than full diffuse.
+		Vector3f dir_random = add(normal, random_in_unit_sphere());
+		Vector3f dir_reflected = sub(ray.d, mul(2.0f*dot(normal, ray.d), normal));
+		Material *mat = &world->materials[sphere_nearest->material_id];
+		// TO DO: Linear interpolation might not be the right thing here.
+		ray = Ray{hit.p, lerp(mat->diffuse, dir_random, dir_reflected)};
 		f32 iangle = 0.0f;  // TO DO: compute incident angle.
 		f32 oangle = 0.0f;  // TO DO: compute outgoing angle.
-		Color3f a = bounce_attenuation(world->materials[sphere_nearest->material_id], iangle, oangle);
+		Color3f a = bounce_attenuation(mat, iangle, oangle);
 		attenuation = mul(attenuation, a);
 
 		// TO DO: early exit if attenuation is very small.

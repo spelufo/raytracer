@@ -73,6 +73,10 @@ internal Vector3f normalize(Vector3f v) {
 	return div(v, norm(v));
 }
 
+internal Vector3f lerp(f32 l, Vector3f v, Vector3f w) {
+	return add(mul(l, v), mul(1.0f - l, w));
+}
+
 
 // Point
 
